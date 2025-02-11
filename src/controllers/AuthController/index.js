@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../../models/users');
+const {where} = require("sequelize");
 
 
 Register = async ( req, res )=>{
@@ -37,10 +38,24 @@ Register = async ( req, res )=>{
 Login = async ( req, res )=>{
     const { email, password} = req.body;
     try{
-        if(!email){
-            res.status(400).json({error_message:"not found"});
+        const user = await User.findOne({where: {email}});
+        if(!user){
+            res.status(400).json({error_message:"User Doesn't Exist!"});
         }
-        res.status(200).json({ message: `${email}` });
+        const isMatch = await bcrypt.compare(password, user.password);
+        if(!isMatch){
+            res.status(400).json({ message: 'Invalid Credentials' });
+        }
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+
+        res.status(200).json({
+            message: "Login successful!",
+            user_details: {
+                role: user.role,
+                industry: user.IndustryType
+            },
+            AuthToken: token
+        });
     }catch (e){
         res.status(500).json({error_message: e.message});
     }

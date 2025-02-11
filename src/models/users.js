@@ -32,11 +32,11 @@ User.init(
             type: DataTypes.STRING,
             allowNull: true,
         },
-        IndustryType: {
+        JobTitle: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        JobTitle: {
+        IndustryType: {
             type: DataTypes.STRING,
             allowNull: false,
         },

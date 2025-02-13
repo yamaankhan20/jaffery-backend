@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
     const token = req.header('Authorization');
 
     if (!token) {
-        return res.status(401).json({ message: 'Unauthorized! access denied' });
+        return res.status(401).json({ error_message: 'Unauthorized! access denied' });
     }
 
     try {
@@ -16,6 +16,6 @@ module.exports = (req, res, next) => {
         req.user = decoded;
         next();
     } catch (err) {
-        res.status(401).json({ message: 'Invalid Token!' });
+        res.status(401).json({ error_message: 'Invalid Token!' });
     }
 };

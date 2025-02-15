@@ -9,6 +9,9 @@ const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
 const User = require('./users');
+const LegalAssistance = require('./legalassistance');
+const VirtualClinic = require('./virtualclinic');
+const ProfessionNetwork = require('./professionnetwork');
 
 let sequelize;
 if (config.use_env_variable) {
@@ -41,5 +44,10 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 db.User = User;
+db.LegalAssistance = LegalAssistance
+db.VirtualClinic = VirtualClinic;
+db.ProfessionNetwork = ProfessionNetwork;
+
+
 
 module.exports = db;

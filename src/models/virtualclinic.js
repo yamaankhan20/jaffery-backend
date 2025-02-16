@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
   VirtualClinic.init(
       {
         user_id: DataTypes.INTEGER,
+          receiver_id: DataTypes.INTEGER,
         gender: DataTypes.STRING,
         age: DataTypes.STRING,
         contact_info: DataTypes.INTEGER,
@@ -24,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       {
         sequelize,
         modelName: 'VirtualClinic',
-        tableName: 'virtual_clinic', // **Table Name Set Karo**
+        tableName: 'virtualclinics', // **Table Name Set Karo**
         timestamps: true,
       }
   );

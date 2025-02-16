@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../../models/users');
+const { User } = require("../../models");
+const { Op } = require("sequelize");
 
 
 get_all_users = async ( req, res )=>{
@@ -14,7 +15,11 @@ get_all_users = async ( req, res )=>{
             {
                 where: {
                     role: target_role,
-                    IndustryType: industry_type
+                    IndustryType: {
+                        [Op.or]: industry_type.map(type => ({
+                            [Op.like]: `%${type}%`
+                        }))
+                    }
                 }
             });
         return res.status(200).json({ users: all_users });

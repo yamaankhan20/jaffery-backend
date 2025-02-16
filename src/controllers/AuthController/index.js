@@ -1,7 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../../models/users');
+const { User } = require("../../models"); // Import from models/index.js
 const {where} = require("sequelize");
+require("dotenv").config();
 
 
 Register = async ( req, res )=>{

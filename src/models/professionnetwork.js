@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
   ProfessionNetwork.init(
       {
         user_id: DataTypes.INTEGER,
+          receiver_id: DataTypes.INTEGER,
         full_name: DataTypes.STRING,
         email: DataTypes.STRING,
         description: DataTypes.TEXT,
@@ -18,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       {
         sequelize,
         modelName: 'ProfessionNetwork',
-        tableName: 'profession_network', // **Table Name Set Karo**
+        tableName: 'professionnetworks', // **Table Name Set Karo**
         timestamps: true,
       }
   );

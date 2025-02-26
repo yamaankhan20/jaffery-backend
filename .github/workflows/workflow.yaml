@@ -1,9 +1,9 @@
-name: Debug Directory Access on VPS
+name: Deploy to Hostinger VPS
 
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 jobs:
@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Debug SSH Connection and Directory Access
+      - name: Deploy via SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -23,13 +23,16 @@ jobs:
           script: |
             echo "Now Inside Directory"
             cd /var/www/jaffery-backend || exit 1
+            
+            echo "Stashing Local Changes..."
+            git reset --hard HEAD  # Discard all local changes
+            git clean -fd  # Remove untracked files and directories
 
-            echo "Fetching latest code from GitHub..."
-            git fetch origin
-            git checkout master
+            echo "Pulling Latest Code from GitHub..."
             git pull origin master
 
-            echo "Restarting application with PM2..."
+            echo "Restarting Application with PM2..."
+            export PATH=$HOME/.nvm/versions/node/v18.0.0/bin:$PATH
             pm2 restart 0
 
-            echo "✅ Deployment successful!"
+            echo "Deployment successful!"

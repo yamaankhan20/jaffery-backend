@@ -20,8 +20,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_PRIVATE_KEY }}
           script: |
-            cd /var/www/jaffery-backend
-            git pull origin main
-            npm install
-            pm2 restart server.js
-            echo "Deployment successful!"
+            echo "Connected to VPS"
+            whoami
+            pwd
+            ls -la /var/www/jaffery-backend

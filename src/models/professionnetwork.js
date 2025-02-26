@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       {
         sequelize,
         modelName: 'ProfessionNetwork',
-        tableName: 'professionnetworks', // **Table Name Set Karo**
+        tableName: 'ProfessionNetworks', // **Table Name Set Karo**
         timestamps: true,
       }
   );

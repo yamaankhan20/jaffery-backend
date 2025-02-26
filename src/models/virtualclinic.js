@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       {
         sequelize,
         modelName: 'VirtualClinic',
-        tableName: 'virtualclinics', // **Table Name Set Karo**
+        tableName: 'VirtualClinics', // **Table Name Set Karo**
         timestamps: true,
       }
   );

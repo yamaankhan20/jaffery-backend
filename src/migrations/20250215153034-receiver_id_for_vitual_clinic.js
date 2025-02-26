@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.addColumn('virtualclinics', 'receiver_id', {
+    await queryInterface.addColumn('VirtualClinics', 'receiver_id', {
       type: Sequelize.INTEGER,
       allowNull: true,
       after: 'user_id'

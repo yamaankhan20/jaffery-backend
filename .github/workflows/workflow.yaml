@@ -1,10 +1,10 @@
-name: Deploy to Hostinger VPS
+name: Debug Directory Access on VPS
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:  # 👈 This allows manual triggering
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -14,15 +14,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Deploy to VPS via SSH
+      - name: Debug SSH Connection and Directory Access
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_PRIVATE_KEY  }}
+          key: ${{ secrets.VPS_PRIVATE_KEY }}
           script: |
-            cd /var/www/jaffery-backend
-            git pull origin main
-            npm install
-            pm2 restart server.js
-            echo "Deployment successful!"
+            echo "Checking SSH Access..."
+            whoami
+            echo "Current Working Directory:"
+            pwd
+
+            echo "Listing Home Directory:"
+            ls -lah ~
+
+            echo "Checking /var/www/jaffery-backend existence..."
+            if [ -d "/var/www/jaffery-backend" ]; then
+              echo "✅ Directory exists."
+              cd /var/www/jaffery-backend
+              echo "Now inside: $(pwd)"
+              echo "Listing directory contents:"
+              ls -lah
+            else
+              echo "❌ Directory does not exist!"
+            fi

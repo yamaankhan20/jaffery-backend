@@ -31,8 +31,12 @@ jobs:
             echo "Pulling Latest Code from GitHub..."
             git pull origin master
 
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+            
             echo "Restarting Application with PM2..."
-            export PATH=$HOME/.nvm/versions/node/v18.0.0/bin:$PATH
+            export PATH=$HOME/.nvm/versions/node/$(node -v)/bin:$PATH
             pm2 restart 0
 
             echo "Deployment successful!"

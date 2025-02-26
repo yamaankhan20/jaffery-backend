@@ -21,21 +21,12 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_PRIVATE_KEY }}
           script: |
-            echo "Checking SSH Access..."
-            whoami
-            echo "Current Working Directory:"
-            pwd
-
-            echo "Listing Home Directory:"
-            ls -lah ~
-
-            echo "Checking /var/www/jaffery-backend existence..."
-            if [ -d "/var/www/jaffery-backend" ]; then
-              echo "✅ Directory exists."
+              echo "Now Inside Directory"
               cd /var/www/jaffery-backend
-              echo "Now inside: $(pwd)"
-              echo "Listing directory contents:"
-              ls -lah
-            else
-              echo "❌ Directory does not exist!"
-            fi
+              git fetch origin
+              git checkout main
+              git pull origin main
+            
+              pm2 restart 0
+            echo "Deployment successful!"
+              

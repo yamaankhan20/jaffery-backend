@@ -21,12 +21,15 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_PRIVATE_KEY }}
           script: |
-              echo "Now Inside Directory"
-              cd /var/www/jaffery-backend
-              git fetch origin
-              git checkout main
-              git pull origin main
-            
-              pm2 restart 0
-            echo "Deployment successful!"
-              
+            echo "Now Inside Directory"
+            cd /var/www/jaffery-backend || exit 1
+
+            echo "Fetching latest code from GitHub..."
+            git fetch origin
+            git checkout main
+            git pull origin main
+
+            echo "Restarting application with PM2..."
+            pm2 restart 0
+
+            echo "✅ Deployment successful!"

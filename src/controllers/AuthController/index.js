@@ -85,7 +85,7 @@ Google_login = async ( req, res ) => {
         }
 
 
-        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+        const Auth_Token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
         return res.status(200).json({
             message: "Login successful!",
@@ -93,7 +93,7 @@ Google_login = async ( req, res ) => {
                 role: user.role,
                 industry: user.IndustryType
             },
-            AuthToken: token
+            AuthToken: Auth_Token
         });
     } catch (e) {
         return res.status(500).json({ error_message: e.message });

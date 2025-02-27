@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { User } = require("../../models"); // Import from models/index.js
 const {where} = require("sequelize");
 require("dotenv").config();
+const { OAuth2Client } = require("google-auth-library");
 
 
 Register = async ( req, res )=>{
@@ -64,4 +65,39 @@ Login = async ( req, res ) => {
     }
 };
 
-module.exports = { Register, Login };
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+Google_login = async ( req, res ) => {
+    const { token } = req.body;
+    try {
+
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const payload = ticket.getPayload(); // Extract user details
+        const email = payload.email;
+
+        const user = await User.findOne({ where: { email } });
+        if (!user) {
+            return res.status(400).json({ error_message: "User Doesn't Exist!" });
+        }
+
+
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+
+        return res.status(200).json({
+            message: "Login successful!",
+            user_details: {
+                role: user.role,
+                industry: user.IndustryType
+            },
+            AuthToken: token
+        });
+    } catch (e) {
+        return res.status(500).json({ error_message: e.message });
+    }
+};
+
+module.exports = { Register, Login, Google_login };

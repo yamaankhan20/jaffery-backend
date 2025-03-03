@@ -1,5 +1,5 @@
 const {where} = require("sequelize");
-const {User, LegalAssistance, VirtualClinic, ProfessionNetwork } = require('../../models');
+const {User, LegalAssistance, VirtualClinic, ProfessionNetwork, BusinessNetwork } = require('../../models');
 const sendEmail = require('../../utils/Emails/FormIssuesMailer');
 
 legal_issues = async ( req, res )=>{
@@ -109,4 +109,29 @@ professional_network = async (req, res)=> {
     }
 }
 
-module.exports = { legal_issues, virtual_clinic, professional_network};
+business_network = async (req, res)=> {
+    const { title, description, image_url } = req.body;
+    const user_id = req.user?.userId;
+
+    if (!user_id) return res.status(400).json({ error_message: "User ID is required" });
+    if (!title) return res.status(400).json({ error_message: "Title is required" });
+    if (!image_url) return res.status(400).json({ error_message: "Image is required" });
+    if (!description) return res.status(400).json({ error_message: "Description is required" });
+
+    try {
+        const BusinessNetwork = await BusinessNetwork.create({
+            user_id,
+            title,
+            description,
+            image_url,
+            status: "pending"
+        });
+
+        res.status(201).json({ message: "Message submitted successfully", data: newProfessionalNetwork });
+
+    }catch (e) {
+        res.status(500).json({ error_message: e.message });
+    }
+}
+
+module.exports = { legal_issues, virtual_clinic, professional_network, business_network };

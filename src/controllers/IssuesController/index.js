@@ -147,7 +147,7 @@ get_business_network = async (req, res)=> {
         const Business_Network = await BusinessNetwork.findAll(
             {
                 where: {
-                    status: "pending",
+                    status: "pendin",
                 }
             }
         );

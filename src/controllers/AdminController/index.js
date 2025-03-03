@@ -30,13 +30,13 @@ get_all_business_network = async (req, res)=> {
 }
 
 approve_business_network = async (req, res)=> {
-    const { user_id } = req.body;
+    const { id } = req.body;
 
     try {
         const [updatedRows] = await BusinessNetwork.update(
             { status: "approved" },  // Update status to "approved"
             {
-                where: { user_id }, // Filter by user_id
+                where: { id }, // Filter by user_id
             }
         );
 
@@ -51,13 +51,13 @@ approve_business_network = async (req, res)=> {
     }
 }
 reject_business_network = async (req, res)=> {
-    const { user_id } = req.body;
+    const { id } = req.body;
 
     try {
         const [updatedRows] = await BusinessNetwork.update(
             { status: "rejected" },
             {
-                where: { user_id },
+                where: { id },
             }
         );
 

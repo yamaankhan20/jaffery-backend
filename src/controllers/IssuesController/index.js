@@ -147,12 +147,12 @@ get_business_network = async (req, res)=> {
         const Business_Network = await BusinessNetwork.findAll(
             {
                 where: {
-                    status: "approved",
+                    status: "pending",
                 }
             }
         );
 
-        res.status(201).json({ message: "Ad submitted successfully", data: Business_Network });
+        res.status(201).json({ message: "All Ads!", data: Business_Network });
 
     }catch (e) {
         res.status(500).json({ error_message: e.message });

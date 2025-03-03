@@ -119,7 +119,7 @@ business_network = async (req, res)=> {
     if (!description) return res.status(400).json({ error_message: "Description is required" });
 
     try {
-        const BusinessNetwork = await BusinessNetwork.create({
+        const Business_Network = await BusinessNetwork.create({
             user_id,
             title,
             description,
@@ -127,7 +127,7 @@ business_network = async (req, res)=> {
             status: "pending"
         });
 
-        res.status(201).json({ message: "Message submitted successfully", data: newProfessionalNetwork });
+        res.status(201).json({ message: "Message submitted successfully", data: Business_Network });
 
     }catch (e) {
         res.status(500).json({ error_message: e.message });

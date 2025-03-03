@@ -18,7 +18,15 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     description: DataTypes.STRING,
     image_url: DataTypes.STRING,
-    status: DataTypes.STRING
+    status: DataTypes.STRING,
+    category: DataTypes.STRING,
+    price_offer: DataTypes.STRING,
+    contact_email: {
+      type: DataTypes.STRING,
+      validate: { isEmail: true },
+    },
+    contact_phone: DataTypes.STRING,
+    location: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'BusinessNetwork',

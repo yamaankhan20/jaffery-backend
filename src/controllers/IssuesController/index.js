@@ -134,29 +134,5 @@ business_network = async (req, res)=> {
     }
 }
 
-get_business_network = async (req, res)=> {
-    const { title, description, image_url } = req.body;
-    const user_id = req.user?.userId;
-
-    if (!user_id) return res.status(400).json({ error_message: "User ID is required" });
-    if (!title) return res.status(400).json({ error_message: "Title is required" });
-    if (!image_url) return res.status(400).json({ error_message: "Image is required" });
-    if (!description) return res.status(400).json({ error_message: "Description is required" });
-
-    try {
-        const Business_Network = await BusinessNetwork.findAll(
-            {
-                where: {
-                    status: "pending",
-                }
-            }
-        );
-
-        res.status(201).json({ message: "All Ads!", data: Business_Network });
-
-    }catch (e) {
-        res.status(500).json({ error_message: e.message });
-    }
-}
 
 module.exports = { legal_issues, virtual_clinic, professional_network, business_network, get_business_network };

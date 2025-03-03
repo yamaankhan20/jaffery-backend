@@ -1,5 +1,5 @@
 const {where} = require("sequelize");
-const {User, LegalAssistance, VirtualClinic, ProfessionNetwork } = require('../../models');
+const {User, LegalAssistance, VirtualClinic, ProfessionNetwork, BusinessNetwork } = require('../../models');
 const sendEmail = require('../../utils/Emails/FormIssuesMailer');
 
 legal_issues = async ( req, res )=>{
@@ -109,5 +109,41 @@ professional_network = async (req, res)=> {
     }
 }
 
+business_network = async (req, res) => {
+    const { title, description, image_url, category, ad_description, price_offer, contact_email, contact_phone, location } = req.body;
+    const user_id = req.user?.userId;
 
-module.exports = { legal_issues, virtual_clinic, professional_network};
+    if (!user_id) return res.status(400).json({ error_message: "User ID is required" });
+    if (!title) return res.status(400).json({ error_message: "Title is required" });
+    if (!image_url || !Array.isArray(image_url)) return res.status(400).json({ error_message: "At least one image is required in JSON format (Array)" });
+    if (!description) return res.status(400).json({ error_message: "Description is required" });
+    if (!category) return res.status(400).json({ error_message: "Category is required" });
+    if (!ad_description) return res.status(400).json({ error_message: "Ad Description is required" });
+    if (!contact_email) return res.status(400).json({ error_message: "Contact Email is required" });
+    if (!contact_phone) return res.status(400).json({ error_message: "Contact Phone is required" });
+    if (!location) return res.status(400).json({ error_message: "Location is required" });
+
+    try {
+        const Business_Network = await BusinessNetwork.create({
+            user_id,
+            title,
+            description,
+            image_url: JSON.stringify(image_url), // Store as JSON format
+            category,
+            ad_description,
+            price_offer,
+            contact_email,
+            contact_phone,
+            location,
+            status: "pending"
+        });
+
+        res.status(201).json({ message: "Ad submitted successfully", data: Business_Network });
+
+    } catch (e) {
+        res.status(500).json({ error_message: e.message });
+    }
+};
+
+
+module.exports = { legal_issues, virtual_clinic, professional_network, business_network };

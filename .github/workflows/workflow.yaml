@@ -30,13 +30,17 @@ jobs:
 
             echo "Pulling Latest Code from GitHub..."
             git pull origin master
-
+            
+            npx sequelize-cli db:migrate
+            
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
             
             echo "Restarting Application with PM2..."
             export PATH=$HOME/.nvm/versions/node/$(node -v)/bin:$PATH
+            export PATH="/usr/bin:$PATH"
+            npx sequelize-cli db:migrate
             pm2 restart 0
 
             echo "Deployment successful!"

@@ -5,7 +5,7 @@ const { Op } = require("sequelize");
 
 
 const get_all_users = async (req, res) => {
-    const { industry_type } = req.query;
+    const { role } = req.query;
     const user_id = req.user?.userId;
 
     try {
@@ -15,19 +15,17 @@ const get_all_users = async (req, res) => {
             return res.status(404).json({ error_message: "User not found" });
         }
 
-        const target_role = users.role === "seeker" ? "helper" : "seeker";
-
-        // Ensure industry_type is always an array
-        const industryTypes = Array.isArray(industry_type) ? industry_type : [industry_type];
+        // const target_role = users.role === "seeker" ? "helper" : "seeker";
+        // const industryTypes = Array.isArray(industry_type) ? industry_type : [industry_type];
 
         const all_users = await User.findAll({
             where: {
-                role: target_role,
-                IndustryType: {
-                    [Op.or]: industryTypes.map(type => ({
-                        [Op.like]: `%${type}%`
-                    }))
-                }
+                role: role,
+                // IndustryType: {
+                //     [Op.or]: industryTypes.map(type => ({
+                //         [Op.like]: `%${type}%`
+                //     }))
+                // }
             }
         });
 

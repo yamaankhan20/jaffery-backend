@@ -127,7 +127,7 @@ business_network = async (req, res)=> {
             status: "pending"
         });
 
-        res.status(201).json({ message: "Message submitted successfully", data: Business_Network });
+        res.status(201).json({ message: "Ad submitted successfully", data: Business_Network });
 
     }catch (e) {
         res.status(500).json({ error_message: e.message });

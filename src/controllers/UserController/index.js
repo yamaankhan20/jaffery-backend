@@ -20,7 +20,7 @@ const get_all_users = async (req, res) => {
 
         const all_users = await User.findAll({
             where: {
-                role: role,
+                role: target_role,
                 IndustryType: {
                     [Op.or]: industryTypes.map(type => ({
                         [Op.like]: `%${type}%`

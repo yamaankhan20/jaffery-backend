@@ -1,6 +1,11 @@
 const {where} = require("sequelize");
 const {User, LegalAssistance, VirtualClinic, ProfessionNetwork, BusinessNetwork } = require('../../models');
 const sendEmail = require('../../utils/Emails/FormIssuesMailer');
+const path = require("path");
+const fs = require("fs");
+const multer = require("multer");
+
+
 
 legal_issues = async ( req, res )=>{
     const { receiver_id, full_name, email, PhoneNumber, address, legal_issue, specific_issue, description, relevent_data } = req.body;
@@ -110,27 +115,30 @@ professional_network = async (req, res)=> {
 }
 
 business_network = async (req, res) => {
-    const { title, description, image_url, category, ad_description, price_offer, contact_email, contact_phone, location } = req.body;
+    const { title, description, category, price_offer, contact_email, contact_phone, location } = req.body;
     const user_id = req.user?.userId;
 
     if (!user_id) return res.status(400).json({ error_message: "User ID is required" });
     if (!title) return res.status(400).json({ error_message: "Title is required" });
-    if (!image_url || !Array.isArray(image_url)) return res.status(400).json({ error_message: "At least one image is required in JSON format (Array)" });
     if (!description) return res.status(400).json({ error_message: "Description is required" });
     if (!category) return res.status(400).json({ error_message: "Category is required" });
-    if (!ad_description) return res.status(400).json({ error_message: "Ad Description is required" });
     if (!contact_email) return res.status(400).json({ error_message: "Contact Email is required" });
     if (!contact_phone) return res.status(400).json({ error_message: "Contact Phone is required" });
     if (!location) return res.status(400).json({ error_message: "Location is required" });
 
     try {
+        let uploadedImages = [];
+
+        if (req.files && req.files.length > 0) {
+            uploadedImages = req.files.map((file) => `/uploads/${file.filename}`);
+        }
+
         const Business_Network = await BusinessNetwork.create({
             user_id,
             title,
             description,
-            image_url: JSON.stringify(image_url), // Store as JSON format
+            image_url: JSON.stringify(uploadedImages),
             category,
-            ad_description,
             price_offer,
             contact_email,
             contact_phone,

@@ -1,5 +1,5 @@
 module.exports = (req, res, next) => {
-    if (req.path.startsWith('/public/uploads')) {
+    if (req.path.startsWith('/uploads')) {
         return next();
     }
 

@@ -15,7 +15,6 @@ router.use('/v1/info', userRoute);
 router.use('/v1/issues', issuesRoute);
 router.use('/v1/admin', AdminRoute);
 
-router.use("/public/uploads", express.static(path.join(__dirname, "src/public/uploads")));
 
 
 module.exports = router;

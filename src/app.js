@@ -10,7 +10,7 @@ const path = require("path");
 app.use(express.json());
 app.use(cors());
 
-app.use("/public/uploads", express.static(path.join(__dirname, "src/public/uploads")));
+app.use("/src/public/uploads", express.static(path.join(__dirname, "src/public/uploads")));
 
 app.use(AuthMiddleware);
 app.use('/api', routes);

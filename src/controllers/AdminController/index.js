@@ -12,7 +12,7 @@ get_business_network = async (req, res)=> {
             }
         );
 
-        res.status(201).json({ message: "All Ads!", data: Business_Network });
+        res.status(200).json({ message: "All Ads!", data: Business_Network });
 
     }catch (e) {
         res.status(500).json({ error_message: e.message });

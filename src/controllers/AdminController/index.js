@@ -2,11 +2,12 @@ const {where} = require("sequelize");
 const { BusinessNetwork } = require('../../models');
 
 get_business_network = async (req, res)=> {
+    const {status_all} = req.query;
     try {
         const Business_Network = await BusinessNetwork.findAll(
             {
                 where: {
-                    status: "pending",
+                    status: status_all,
                 }
             }
         );

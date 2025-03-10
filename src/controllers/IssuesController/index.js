@@ -130,7 +130,7 @@ business_network = async (req, res) => {
         let uploadedImages = [];
 
         if (req.files && req.files.length > 0) {
-            uploadedImages = req.files.map((file) => `/uploads/${file.filename}`);
+            uploadedImages = req.files.map((file) => `${file.filename}`);
         }
 
         const Business_Network = await BusinessNetwork.create({

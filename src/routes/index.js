@@ -5,6 +5,7 @@ const userRoute = require('./user');
 const issuesRoute = require('./issue-forms');
 const ContactRoute = require('./contactform');
 const AdminRoute = require('./admin');
+const path = require("path");
 
 router.use('/v1/auth', authRoute);
 router.use('/v1/contact', ContactRoute);
@@ -13,6 +14,8 @@ router.use('/v1/contact', ContactRoute);
 router.use('/v1/info', userRoute);
 router.use('/v1/issues', issuesRoute);
 router.use('/v1/admin', AdminRoute);
+
+router.use("/public/uploads", express.static(path.join(__dirname, "src/public/uploads")));
 
 
 module.exports = router;

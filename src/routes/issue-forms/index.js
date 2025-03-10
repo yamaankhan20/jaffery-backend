@@ -26,6 +26,5 @@ router.post('/virtual-clinic', UserController.virtual_clinic);
 router.post('/professional-network', UserController.professional_network);
 router.post('/business-network', upload.array("images", 7), UserController.business_network);
 
-app.use("/public/uploads", express.static(path.join(__dirname, "src/public/uploads")));
 
 module.exports = router;

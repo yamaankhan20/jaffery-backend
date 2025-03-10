@@ -10,8 +10,8 @@ const path = require("path");
 app.use(express.json());
 app.use(cors());
 
-app.use("/uploads", express.static(path.join(__dirname, "src/public/uploads")));
-console.log("Serving static files from:", path.join(__dirname, "src/public/uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
+console.log("Serving static files from:", path.join(__dirname, "public/uploads"));
 
 app.use(AuthMiddleware);
 app.use('/api', routes);

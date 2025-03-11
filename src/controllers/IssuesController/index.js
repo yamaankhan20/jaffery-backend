@@ -127,25 +127,24 @@ business_network = async (req, res) => {
     if (!location) return res.status(400).json({ error_message: "Location is required" });
 
     try {
-        // let uploadedImages = [];
+        let uploadedImages = [];
 
-        // if (req.files && req.files.length > 0) {
-        //     uploadedImages = req.files.map((file) => `${file.filename}`);
-        // }
+        if (req.files && req.files.length > 0) {
+            uploadedImages = req.files.map((file) => `${file.filename}`);
+        }
 
-        // const Business_Network = await BusinessNetwork.create({
-        //     user_id,
-        //     title,
-        //     description,
-        //     image_url: JSON.stringify(uploadedImages),
-        //     category,
-        //     price_offer,
-        //     contact_email,
-        //     contact_phone,
-        //     location,
-        //     status: "pending"
-        // });
-        await BusinessNetwork.destroy({ where: {}, truncate: true });
+        const Business_Network = await BusinessNetwork.create({
+            user_id,
+            title,
+            description,
+            image_url: JSON.stringify(uploadedImages),
+            category,
+            price_offer,
+            contact_email,
+            contact_phone,
+            location,
+            status: "pending"
+        });
 
         res.status(201).json({ message: "Ad submitted successfully", data: Business_Network });
 

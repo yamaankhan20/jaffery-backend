@@ -120,7 +120,8 @@ Business_Register = async ( req, res )=>{
             role:"helper",
             IndustryType,
             JobTitle:"business",
-            Description
+            Description,
+            PhoneNumber:''
         });
 
         const Business_Group = await BusinessGroup.create({

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
-    if (req.path.startsWith('/api/v1/auth') || req.path.startsWith('/api/v1/contact') || req.path.startsWith('/uploads')) {
+    if (req.path.startsWith('/api/v1/admin/get-business-group') || req.path.startsWith('/api/v1/auth') || req.path.startsWith('/api/v1/contact') || req.path.startsWith('/uploads')) {
         return next();
     }
 

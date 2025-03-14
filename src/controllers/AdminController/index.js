@@ -165,7 +165,7 @@ delete_user = async (req, res)=> {
 
         await User.destroy({
             where: {
-                id: user_id,
+                id: id,
             },
         });
         res.status(200).json({message: "User deleted successfully!"});

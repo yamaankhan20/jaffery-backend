@@ -14,4 +14,10 @@ router.get('/get-all-business-group', AdminController.get_all_business_group);
 router.post('/approve-business-group', AdminController.approve_business_group);
 router.post('/reject-business-group', AdminController.reject_business_group);
 
+
+router.post('/delete-user', AdminController.delete_user);
+router.post('/delete-ads', AdminController.delete_ads);
+router.post('/delete-business', AdminController.delete_business);
+
+
 module.exports = router;

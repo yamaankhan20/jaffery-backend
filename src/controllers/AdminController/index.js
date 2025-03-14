@@ -1,5 +1,5 @@
 const {where} = require("sequelize");
-const { BusinessNetwork, BusinessGroup } = require('../../models');
+const { BusinessNetwork, BusinessGroup, User } = require('../../models');
 
 get_business_network = async (req, res)=> {
     const {status_all} = req.query;
@@ -143,6 +143,52 @@ reject_business_group = async (req, res)=> {
     }
 }
 
+
+delete_ads = async (req, res)=> {
+    const { id } = req.body;
+    try {
+
+        await BusinessNetwork.destroy({
+            where: {
+                id: id,
+            },
+        });
+        res.status(200).json({ message: "Business network deleted successfully!" });
+    }catch (e) {
+        res.status(500).json({ error_message: e.message });
+    }
+};
+
+delete_user = async (req, res)=> {
+    const {user_id} = req.body;
+    try {
+
+        await User.destroy({
+            where: {
+                id: user_id,
+            },
+        });
+        res.status(200).json({message: "User deleted successfully!"});
+    } catch (e) {
+        res.status(500).json({error_message: e.message});
+    }
+};
+
+delete_business = async (req, res)=> {
+    const {id} = req.body;
+    try {
+
+        await BusinessGroup.destroy({
+            where: {
+                id: id,
+            },
+        });
+        res.status(200).json({message: "Business deleted successfully!"});
+    } catch (e) {
+        res.status(500).json({error_message: e.message});
+    }
+};
+
 module.exports = {
     get_business_network,
     get_all_business_network,
@@ -152,5 +198,7 @@ module.exports = {
     get_all_business_group,
     approve_business_group,
     reject_business_group,
-
+    delete_ads,
+    delete_user,
+    delete_business
 };

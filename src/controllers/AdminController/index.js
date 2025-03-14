@@ -160,7 +160,7 @@ delete_ads = async (req, res)=> {
 };
 
 delete_user = async (req, res)=> {
-    const {user_id} = req.body;
+    const {id} = req.body;
     try {
 
         await User.destroy({

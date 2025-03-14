@@ -92,7 +92,7 @@ get_business_group = async (req, res)=> {
 }
 get_all_business_group = async (req, res)=> {
     try {
-        const Business_group = await BusinessGroup.findAll();
+        const Business_group = await  BusinessGroup.findAll();
 
         res.status(200).json({ message: "All Ads!", data: Business_group });
 

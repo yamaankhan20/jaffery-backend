@@ -134,7 +134,7 @@ Business_Register = async ( req, res )=>{
 
 
 
-        res.status(201).json({ message: "User registered successfully!", user: newUser,});
+        res.status(201).json({ message: "User registered successfully!", user: Business_Group,});
 
 
     }catch (e){

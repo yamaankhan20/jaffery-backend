@@ -153,6 +153,36 @@ business_network = async (req, res) => {
     }
 };
 
+business_group = async (req, res)=> {
+    const { receiver_id, full_name, email, description } = req.body;
+    const user_id = req.user?.userId;
+
+    if (!user_id) return res.status(400).json({ error_message: "User ID is required" });
+    if (!full_name) return res.status(400).json({ error_message: "Full name is required" });
+    if (!email) return res.status(400).json({ error_message: "Email is required" });
+    if (!description) return res.status(400).json({ error_message: "Description is required" });
+
+    try {
+        const newProfessionalNetwork = await ProfessionNetwork.create({
+            receiver_id,
+            user_id,
+            full_name,
+            email,
+            description
+        });
+        const existingOne = await User.findOne({ where: { id:receiver_id } } );
+        const current_user = await User.findOne({ where: { id: user_id } } );
+
+        await sendEmail(existingOne.email, "Business Group","business-group", newProfessionalNetwork.get({ plain: true }));
+
+        await sendEmail(current_user.email, "Business Group","business-group", newProfessionalNetwork.get({ plain: true }));
+        res.status(201).json({ message: "Message submitted successfully", data: newProfessionalNetwork });
+
+    }catch (e) {
+        res.status(500).json({ error_message: e.message });
+    }
+}
 
 
-module.exports = { legal_issues, virtual_clinic, professional_network, business_network };
+
+module.exports = { legal_issues, virtual_clinic, professional_network, business_network, business_group };

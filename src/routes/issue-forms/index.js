@@ -24,6 +24,7 @@ const upload = multer({ storage });
 router.post('/legal-assistance', UserController.legal_issues);
 router.post('/virtual-clinic', UserController.virtual_clinic);
 router.post('/professional-network', UserController.professional_network);
+router.post('/business-groups', UserController.business_group);
 router.post('/business-network', upload.array("images", 7), UserController.business_network);
 
 

@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { User } = require("../../models"); // Import from models/index.js
+const { User, BusinessGroup } = require("../../models"); // Import from models/index.js
 const {where} = require("sequelize");
 require("dotenv").config();
 const { OAuth2Client } = require("google-auth-library");
@@ -100,4 +100,46 @@ Google_login = async ( req, res ) => {
     }
 };
 
-module.exports = { Register, Login, Google_login };
+
+Business_Register = async ( req, res )=>{
+    const { name, email, password, IndustryType, Description, website_url} = req.body;
+    try{
+        if (!name || !email || !password) {
+            return res.status(400).json({ error_message: "Name, email, and password are required." });
+        }
+        const existingOne = await User.findOne({ where: { email } } );
+        if(existingOne){
+            return res.status(400).json({ error_message: "User Already Exist!" });
+        }
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        const newUser = await User.create({
+            name,
+            email,
+            password: hashedPassword,
+            role:"helper",
+            IndustryType,
+            JobTitle:"business",
+            Description,
+            PhoneNumber:''
+        });
+
+        const Business_Group = await BusinessGroup.create({
+            user_id: newUser.id,
+            title: name,
+            description: Description,
+            website: website_url,
+            status: 0
+        });
+
+
+
+        res.status(201).json({ message: "User registered successfully!", user: Business_Group,});
+
+
+    }catch (e){
+        res.status(500).json({error_message: e.message});
+    }
+};
+
+module.exports = { Register, Login, Google_login,Business_Register };

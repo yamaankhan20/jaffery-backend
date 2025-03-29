@@ -1,5 +1,5 @@
 const {where} = require("sequelize");
-const { ContactForm } = require('../../models');
+const { ContactForm} = require('../../models');
 
 contact_form = async ( req, res )=>{
     const { first_name, last_name, email, phone_number, subject, message } = req.body;
@@ -25,4 +25,18 @@ contact_form = async ( req, res )=>{
     }
 };
 
-module.exports = { contact_form };
+get_contact_form = async ( req, res )=>{
+    try{
+        const all_contacts = await ContactForm.findAll({
+            order: [
+                ['id', 'DESC'],
+            ]
+        });
+        res.status(200).json({ message: "All Contact forms!", data: all_contacts});
+
+    }catch (e){
+        res.status(500).json({error_message: e.message});
+    }
+};
+
+module.exports = { contact_form, get_contact_form };

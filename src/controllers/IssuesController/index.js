@@ -1,6 +1,11 @@
-const {where} = require("sequelize");
-const {User, LegalAssistance, VirtualClinic, ProfessionNetwork } = require('../../models');
+const {where, sequelize} = require("sequelize");
+const {User, LegalAssistance, VirtualClinic, ProfessionNetwork, BusinessNetwork } = require('../../models');
 const sendEmail = require('../../utils/Emails/FormIssuesMailer');
+const path = require("path");
+const fs = require("fs");
+const multer = require("multer");
+
+
 
 legal_issues = async ( req, res )=>{
     const { receiver_id, full_name, email, PhoneNumber, address, legal_issue, specific_issue, description, relevent_data } = req.body;
@@ -109,4 +114,75 @@ professional_network = async (req, res)=> {
     }
 }
 
-module.exports = { legal_issues, virtual_clinic, professional_network};
+business_network = async (req, res) => {
+    const { title, description, category, price_offer, contact_email, contact_phone, location } = req.body;
+    const user_id = req.user?.userId;
+
+    if (!user_id) return res.status(400).json({ error_message: "User ID is required" });
+    if (!title) return res.status(400).json({ error_message: "Title is required" });
+    if (!description) return res.status(400).json({ error_message: "Description is required" });
+    if (!category) return res.status(400).json({ error_message: "Category is required" });
+    if (!contact_email) return res.status(400).json({ error_message: "Contact Email is required" });
+    if (!contact_phone) return res.status(400).json({ error_message: "Contact Phone is required" });
+    if (!location) return res.status(400).json({ error_message: "Location is required" });
+
+    try {
+        let uploadedImages = [];
+
+        if (req.files && req.files.length > 0) {
+            uploadedImages = req.files.map((file) => `${file.filename}`);
+        }
+
+        const Business_Network = await BusinessNetwork.create({
+            user_id,
+            title,
+            description,
+            image_url: JSON.stringify(uploadedImages),
+            category,
+            price_offer,
+            contact_email,
+            contact_phone,
+            location,
+            status: "pending"
+        });
+
+        res.status(201).json({ message: "Ad submitted successfully", data: Business_Network });
+
+    } catch (e) {
+        res.status(500).json({ error_message: e.message });
+    }
+};
+
+business_group = async (req, res)=> {
+    const { receiver_id, full_name, email, description } = req.body;
+    const user_id = req.user?.userId;
+
+    if (!user_id) return res.status(400).json({ error_message: "User ID is required" });
+    if (!full_name) return res.status(400).json({ error_message: "Full name is required" });
+    if (!email) return res.status(400).json({ error_message: "Email is required" });
+    if (!description) return res.status(400).json({ error_message: "Description is required" });
+
+    try {
+        const newProfessionalNetwork = await ProfessionNetwork.create({
+            receiver_id,
+            user_id,
+            full_name,
+            email,
+            description
+        });
+        const existingOne = await User.findOne({ where: { id:receiver_id } } );
+        const current_user = await User.findOne({ where: { id: user_id } } );
+
+        await sendEmail(existingOne.email, "Business Group","business-group", newProfessionalNetwork.get({ plain: true }));
+
+        await sendEmail(current_user.email, "Business Group","business-group", newProfessionalNetwork.get({ plain: true }));
+        res.status(201).json({ message: "Message submitted successfully", data: newProfessionalNetwork });
+
+    }catch (e) {
+        res.status(500).json({ error_message: e.message });
+    }
+}
+
+
+
+module.exports = { legal_issues, virtual_clinic, professional_network, business_network, business_group };

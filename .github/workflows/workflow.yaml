@@ -1,0 +1,46 @@
+name: Deploy to Hostinger VPS
+
+on:
+  push:
+    branches:
+      - master
+#  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_PRIVATE_KEY }}
+          script: |
+            echo "Now Inside Directory"
+            cd /var/www/jaffery-backend || exit 1
+            
+            echo "Stashing Local Changes..."
+            git reset --hard HEAD  # Discard all local changes
+            git clean -fd  # Remove untracked files and directories
+
+            echo "Pulling Latest Code from GitHub..."
+            git pull origin master
+            
+            npx sequelize-cli db:migrate
+            
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+            
+            echo "Restarting Application with PM2..."
+            export PATH=$HOME/.nvm/versions/node/$(node -v)/bin:$PATH
+            export PATH="/usr/bin:$PATH"
+            npx sequelize-cli db:migrate
+            pm2 restart 0
+
+            echo "Deployment successful!"
